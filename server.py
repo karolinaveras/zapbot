@@ -6,7 +6,7 @@ from LeituraCSV import CsvRead
 
 # Configurações principais
 RESOLUCAO_TELA = (1366, 768)  # Defina a resolução da tela
-NOME_ARQUIVO_CSV = 'SrRicardo.csv'  # Arquivo CSV contendo os números de telefone
+NOME_ARQUIVO_CSV = 'contatos.csv'  # Arquivo CSV contendo os números de telefone
 TEXTO = ''  # Texto a ser enviado
 ENVIAR_MIDIA = False  # Defina como True para enviar mídias
 
