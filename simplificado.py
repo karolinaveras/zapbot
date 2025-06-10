@@ -1,8 +1,11 @@
+import PySimpleGUI as sg
 import csv
 import time
 from datetime import datetime
 import pyautogui
 import pyperclip
+import sys
+import os
 
 pyautogui.PAUSE = 1.5  # Adiciona pequena pausa entre ações
 pyautogui.FAILSAFE = True  # Permite abortar movendo mouse para canto
@@ -145,6 +148,67 @@ class WhatsAppBot:
             f.write(relatorio)
         
         print(relatorio)
+
+def criar_interface():
+    """Cria e retorna a janela principal da interface gráfica"""
+    sg.theme('DarkTeal9')
+    
+    layout = [
+        [sg.Text('Arquivo CSV:'), sg.Input(key='-CSV-'), sg.FileBrowse()],
+        [sg.Text('Mensagem:')],
+        [sg.Multiline(size=(50, 5), key='-TEXTO-')],
+        [sg.Checkbox('Enviar mídia', key='-MIDIA-')],
+        [sg.Text('Intervalo (segundos):'), sg.Input('5', size=(5,1), key='-INTERVALO-')],
+        [sg.Button('Iniciar', size=(10,1)), sg.Button('Sair', size=(10,1))],
+        [sg.Output(size=(60, 10))]
+    ]
+    
+    return sg.Window('WhatsApp Bot', layout, finalize=True)
+
+def main():
+    window = criar_interface()
+    
+    while True:
+        event, values = window.read()
+        
+        if event in (sg.WINDOW_CLOSED, 'Sair'):
+            break
+            
+        if event == 'Iniciar':
+            if not values['-CSV-']:
+                sg.popup_error('Selecione um arquivo CSV!')
+                continue
+                
+            config = {
+                'arquivo_csv': values['-CSV-'],
+                'texto': values['-TEXTO-'],
+                'enviar_midia': values['-MIDIA-'],
+                'intervalo_envio': float(values['-INTERVALO-']),
+                'coordenadas': {
+                    'chat': (681, 354),
+                    'clip': (485, 693),
+                    'midia': (485, 637),
+                    'area_trabalho': (86, 107),
+                    'pasta': (237, 160)
+                }
+            }
+            
+            print("\n=== INICIANDO ENVIO ===")
+            try:
+                bot = WhatsAppBot(config)
+                print(f"Total de contatos carregados: {len(bot.contatos)}")
+                sg.popup_auto_close('Preparando... Posicione a janela do WhatsApp Web e aguarde', auto_close_duration=5)
+                time.sleep(5)
+                bot.enviar_mensagens()
+                sg.popup('Envio concluído!')
+            except Exception as e:
+                print(f"Erro: {str(e)}")
+                sg.popup_error(f'Ocorreu um erro:\n{str(e)}')
+
+    window.close()
+
+if __name__ == '__main__':
+    main()
 
 # Configuração do bot
 config = {
