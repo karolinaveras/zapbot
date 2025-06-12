@@ -89,7 +89,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para:
 ---
 
 ### **✨ Dúvidas?**  
-Entre em contato: **seu-email@exemplo.com**  
+Entre em contato: **vtechbra@gmail.com**  
 
 ---
 
